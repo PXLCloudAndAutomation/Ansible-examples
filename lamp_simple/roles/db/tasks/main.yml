@@ -1,0 +1,41 @@
+---
+# This playbook will install mysql and create db user and give permissions.
+
+- name: Install Mysql package
+  package: name={{ item }} state=present
+  with_items:
+   - mysql-server
+#   - python-mysqldb # for ubuntu
+  become: yes
+
+# - name: Install MySQL modules
+#   pip: name={{ item }}
+#   with_items:
+#     - mysqlclient
+#     - mysql-connector-python
+#     - MySQL-python
+#   become: yes
+
+- name: Create Mysql configuration file
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify:
+  - restart mysql
+  become: yes
+
+- name: Start Mysql Service
+  service: name=mysql state=started enabled=yes
+  become: yes
+
+- name: insert iptables rule
+  lineinfile: dest=/etc/sysconfig/iptables state=present regexp="{{ mysql_port }}"
+              insertafter="^:OUTPUT " line="-A INPUT -p tcp  --dport {{ mysql_port }} -j  ACCEPT"
+  notify: restart iptables
+  become: yes
+
+- name: Create Application Database
+  mysql_db: name={{ dbname }} state=present
+  become: yes
+
+- name: Create Application DB User
+  mysql_user: name={{ dbuser }} password={{ upassword }} priv=*.*:ALL host='%' state=present
+  become: yes
