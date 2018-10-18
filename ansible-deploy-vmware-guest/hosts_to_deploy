@@ -1,0 +1,10 @@
+[webservers]
+web01 guest_custom_ip='172.16.60.151' vsphere_datastore='datastore1' ansible_host_group='example_group'
+[dbservers]
+db01 guest_custom_ip='172.16.60.152' vsphere_datastore='datastore1' ansible_host_group='example_group'
+#test03 guest_custom_ip='172.16.60.153' vsphere_datastore='datastore1' ansible_host_group='example_group'
+#test04 guest_custom_ip='172.16.60.154' vsphere_datastore='datastore1' ansible_host_group='example_group'
+
+[example_group:children]
+webservers
+dbservers

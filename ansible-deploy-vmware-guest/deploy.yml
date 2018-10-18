@@ -1,0 +1,32 @@
+---
+- name: Create a VM from a template
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: Clone the template
+    vmware_guest:
+      hostname: 172.16.60.201
+      username: Ansible@vsphere.local
+      password: $kPtXgr8WD4*Lm
+      validate_certs: False
+      name: testvm_10
+      template: ubuntu1804-ansible
+      networks:
+        - name: VM Network
+          # device_type: e1000
+          start_connected: true
+          ip: 172.16.60.211
+          netmask: 255.255.255.0
+          gateway: 172.16.60.1
+          dns_servers:
+            - 8.8.8.8
+            - 8.8.4.4
+      # networks:
+#      - name: Extern1
+#        device_type: e1000
+      datacenter: clautomation
+      folder: vm
+      state: poweredon
+
+      #wait_for_ip_address: yes
