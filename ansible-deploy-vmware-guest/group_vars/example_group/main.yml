@@ -10,6 +10,6 @@ guest_gateway: 172.16.60.1
 guest_dns_server: 8.8.8.8
 guest_domain_name: default.local
 guest_id: centos64Guest
-guest_memory: 2048
-guest_vcpu: 2
+guest_memory: 8048
+guest_vcpu: 4
 guest_template: centos7-template
