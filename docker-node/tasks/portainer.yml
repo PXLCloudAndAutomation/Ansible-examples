@@ -1,0 +1,20 @@
+---
+
+
+- name: Create Portainer workspae
+  file: path=/docker_portainer/data state=directory
+
+# https://portainer.readthedocs.io/en/stable/deployment.html#quick-start
+- name: Portainer Server
+  docker_container:
+    name: portainer_server
+    restart_policy: unless-stopped
+    image: portainer/portainer
+    docker_url: "unix://var/run/docker.sock"
+    volumes:
+       - /data/docker_portainer/data:/data
+       - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+       - "127.0.0.1:9000:9000"
+    state: started
+    recreate: yes

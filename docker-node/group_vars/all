@@ -1,0 +1,8 @@
+---
+ansible_user: ansible
+
+#
+# Docker settings
+#
+devops_docker_endpoint: unix://var/run/docker.sock
+docker_recreate: no
