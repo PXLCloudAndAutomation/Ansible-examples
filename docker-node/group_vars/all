@@ -6,3 +6,11 @@ ansible_user: ansible
 #
 devops_docker_endpoint: unix://var/run/docker.sock
 docker_recreate: no
+
+#
+# Jenkins vars
+#
+devops_jenkins_workspace: /data/docker_jenkins
+devops_jenkins_uuid: 1000
+jenkins_image: "jenkins/jenkins:lts"
+docker_jenkins_plugin: /data/docker_jenkins_plugin

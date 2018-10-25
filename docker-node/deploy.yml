@@ -19,6 +19,7 @@
      - deploy_vmware_guest
      #- other roles to execute directly inside VM after deployment
 
+
 - name: Deploy docker-server
   hosts: all
   remote_user: ansible
@@ -36,3 +37,4 @@
     - role: geerlingguy.pip
   tasks:
       - include_tasks: tasks/portainer.yml
+      - include_tasks: tasks/jenkins.yml

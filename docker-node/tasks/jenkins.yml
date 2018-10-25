@@ -1,0 +1,91 @@
+
+- name: Create Jenkins directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ devops_jenkins_uuid }}"
+  register: jenkins_workspace
+  with_items:
+    - "{{ devops_jenkins_workspace }}"
+    - "{{ devops_jenkins_workspace }}/init.groovy.d"
+
+
+- name: Copy plugins file to remote server
+  copy:
+      src: "{{ playbook_dir }}/host_vars/jenkins_plugin.txt"
+      dest: "{{ devops_jenkins_workspace }}/custom_plugins.txt"
+      owner: "{{ devops_jenkins_uuid }}"
+      group: "{{ devops_jenkins_uuid }}"
+      mode: 0644
+
+- name: Copy init.groovy.d scripts
+  template:
+    src: "{{ playbook_dir}}/templates/{{ item }}"
+    dest: "{{ devops_jenkins_workspace }}/init.groovy.d/{{ item }}"
+    owner: "{{ devops_jenkins_uuid }}"
+    group: "{{ devops_jenkins_uuid }}"
+    mode: 0775
+  with_items:
+    - basic-security.groovy
+    - add-global-environment-variables.groovy
+    - configure-csrf-protection.groovy
+    - configure-jnlp-agent-protocols.groovy
+    - configure-slack.groovy
+    - disable-jenkins-cli.groovy
+    - set-content-security-policy.groovy
+
+# https://github.com/jenkinsci/docker/blob/master/README.md
+- name: Jenkins Server
+  docker_container:
+    name: jenkins_master
+    restart_policy: unless-stopped
+    image: "{{ jenkins_image }}"
+    docker_url: "{{ devops_docker_endpoint }}"
+    env:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    volumes:
+      - "{{ devops_jenkins_workspace }}:/var/jenkins_home"
+    ports:
+      #- "8080:8080"
+      - "127.0.0.1:8080:8080"
+    state: started
+    recreate: "{{ docker_recreate }}"
+  register: docker_jenkins
+
+
+- name: Install jenkins plugins (can take some time)
+  command: "docker exec jenkins_master sh -c '/usr/local/bin/install-plugins.sh < /var/jenkins_home/custom_plugins.txt'"
+  when: docker_jenkins.changed
+
+
+- name: Wait for Jenkins to start up before proceeding.
+  shell: "curl -D - --silent --max-time 5 http://localhost:8080/"
+  register: result
+  until: (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
+  retries: 5
+  delay: 2
+  changed_when: false
+  check_mode: no
+
+
+- name: Remove Jenkins security init scripts after first startup.
+  file:
+    path: "{{ devops_jenkins_workspace }}/init.groovy.d/basic-security.groovy"
+    state: absent
+
+#
+#- debug: var=jenkins_var
+#
+#- name: add Jenkins container to inventory
+#  add_host:
+#    name: jenkins_master
+#    ansible_connection: docker
+#    ansible_docker_extra_args: "-H=tcp://52.59.191.203:2375"
+#    ansible_user: jenkins
+#  changed_when: false
+#
+#- name: create directory for ssh keys
+#  delegate_to: jenkins_master
+#  file:
+#    path: "~/.ssh/jupiter"
+#    state: directory
