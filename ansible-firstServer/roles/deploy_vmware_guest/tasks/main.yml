@@ -2,10 +2,6 @@
 # get date
 - set_fact: creationdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
 
-#grab secret stuff
-- name: Include private key from Ansible Vault encrypted file.
-  include_vars: group_vars/secrets.yml
-
 # Create a VM from a template
 - name: create the VM
   vmware_guest:
@@ -52,14 +48,13 @@
   run_once: true
   delegate_to: localhost
 
-# - name: add to /etc/hosts file
-#   lineinfile:
-#     dest: /etc/hosts
-#     line: '{{ guest_custom_ip }} {{ inventory_hostname }}'
-#   with_items: '{{play_hosts}}'
-#   when: "hostvars[item].inventory_hostname == inventory_hostname"
-#   delegate_to: localhost
-#   become: true
+- name: add to /etc/hosts file
+  lineinfile:
+    dest: /etc/hosts
+    line: '{{ guest_custom_ip }} {{ inventory_hostname }}'
+  with_items: '{{play_hosts}}'
+  when: "hostvars[item].inventory_hostname == inventory_hostname"
+  delegate_to: localhost
 
 - name: accept new ssh fingerprints
   shell: ssh-keyscan {{ guest_custom_ip }},{{inventory_hostname}} >> ~/.ssh/known_hosts

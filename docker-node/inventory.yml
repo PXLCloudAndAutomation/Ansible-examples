@@ -1,2 +1,2 @@
 [example_group]
-DOCKER01 guest_custom_ip='172.16.60.188' vsphere_datastore='datastore1' ansible_host_group='example_group'
+DOCKER11 guest_custom_ip='172.16.60.188' vsphere_datastore='datastore1' ansible_host_group='example_group'
