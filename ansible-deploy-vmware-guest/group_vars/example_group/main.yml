@@ -1,15 +1,17 @@
 ---
 #Usual VMware guest deployment variables for example_group group
-vsphere_host: "172.16.60.201"
-vsphere_user: "ansible@vsphere.local"
-vsphere_datacenter: "clautomation"
-vsphere_folder: "/vm"
-guest_network: VM Network
+vsphere_host: "10.128.1.10"
+vsphere_user: "sourbron"
+vsphere_datacenter: PXL-IT
+vsphere_datastore: ProjectSSD
+vsphere_resourcepool: Project compute3
+vsphere_folder: "Project"
+guest_network: Project Routable Network
 guest_netmask: 255.255.255.0
-guest_gateway: 172.16.60.1
+guest_gateway: 10.128.9.1
 guest_dns_server: 8.8.8.8
 guest_domain_name: default.local
 guest_id: centos64Guest
-guest_memory: 8048
+guest_memory: 2048
 guest_vcpu: 4
-guest_template: centos7-template
+guest_template: Centos-7-clean

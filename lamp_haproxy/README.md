@@ -23,13 +23,13 @@ inventory file, grouped by their purpose:
 		[webservers]
 		webserver1
 		webserver2
-		
+
 		[dbservers]
 		dbserver
-		
+
 		[lbservers]
 		lbserver
-		
+
 		[monitoring]
 		nagios
 

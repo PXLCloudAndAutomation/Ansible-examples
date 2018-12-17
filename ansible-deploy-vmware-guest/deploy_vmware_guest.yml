@@ -9,7 +9,7 @@
     - name: "esxi_host"
       prompt: "ESXi host"
       private: no
-      default: "172.16.60.100"
+      default: "compute3.pxl.local"
     - name: "notes"
       prompt: "VM notes"
       private: no

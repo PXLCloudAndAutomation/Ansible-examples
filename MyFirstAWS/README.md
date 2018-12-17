@@ -2,13 +2,14 @@
 Playbook to create an initial test VPC and deploy a basic AMI using Ansible
 
 # Installation
-Pre-suppositions: You have an Amazon Web Services account with a valid payment method configured, and you have your AWS Access Key and AWS Secret Key from your account. Additionally, you have `boto` and Ansible installed on your workstation (install `boto` with `pip install boto`).
+Pre-suppositions: You have an Amazon Web Services account with a valid payment method configured, and you have your AWS Access Key and AWS Secret Key from your account. Additionally, you have `boto` and Ansible installed on your workstation (install `boto3` with `pip install boto3`).
 
 
 Make sure to have your AWS credentials in your env:
 
 1. Set your AWS Access Key: `export AWS_ACCESS_KEY_ID=[access key here]`
 2. Set your AWS Secret Key: `export AWS_SECRET_ACCESS_KEY=[secret key here]`
+3. (For AWS Classroom students) Set your AWS Session Token: `export AWS_SESSION_TOKEN=[token here]`
 
 # Configuration
 

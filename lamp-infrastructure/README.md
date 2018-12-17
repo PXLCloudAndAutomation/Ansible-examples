@@ -76,7 +76,8 @@ To build the droplets and configure them using Ansible, follow these steps (both
 
   1. Set your AWS Access Key: `export AWS_ACCESS_KEY_ID=[access key here]`
   2. Set your AWS Secret Key: `export AWS_SECRET_ACCESS_KEY=[secret key here]`
-  3. Run `ansible-playbook provision.yml`.
+  3. (For AWS Classroom students) Set your AWS Session Token: `export AWS_SESSION_TOKEN=[token here]`
+  4. Run `ansible-playbook provision.yml`.
 
 After everything is booted and configured, visit the IP address of the Varnish server that was created in your AWS account in a browser, and refresh a few times to see that Varnish, Apache, PHP, Memcached, and MySQL are all working properly!
 
